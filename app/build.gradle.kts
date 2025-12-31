@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.novitaai.studio"
+    namespace = "com.stormyai.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.novitaai.studio"
+        applicationId = "com.stormyai.app"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

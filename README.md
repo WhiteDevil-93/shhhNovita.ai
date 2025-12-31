@@ -1,4 +1,4 @@
-# NovitaAI Studio
+# StormyAi
 
 A production-ready Android application for AI image and video generation using the Novita.ai API.
 
@@ -18,7 +18,7 @@ A production-ready Android application for AI image and video generation using t
 The app follows **Clean Architecture** principles with clear separation of concerns:
 
 ```
-com.novitaai.studio/
+com.stormyai.app/
 ├── common/              # Shared utilities and constants
 ├── data/
 │   ├── local/           # Room database, DAOs, entities
@@ -63,7 +63,7 @@ com.novitaai.studio/
 1. **Clone the repository**:
 ```bash
 git clone <repository-url>
-cd NovitaAIStudio
+cd StormyAi
 ```
 
 2. **Generate the Gradle wrapper**:

@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NovitaAIStudio"
+rootProject.name = "StormyAi"
 include(":app")

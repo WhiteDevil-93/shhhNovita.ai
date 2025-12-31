@@ -24,14 +24,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NovitaAIStudio"
+        android:theme="@style/Theme.StormyAi"
         android:usesCleartextTraffic="false"
         tools:targetApi="34">
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.NovitaAIStudio"
+            android:theme="@style/Theme.StormyAi"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
