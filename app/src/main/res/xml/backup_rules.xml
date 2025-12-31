@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Full backup content -->
+    <full-backup-content>
+        <include domain="sharedpref" path="." />
+        <exclude domain="sharedpref" path="datastore.preferences_pb" />
+    </full-backup-content>
+</resources>

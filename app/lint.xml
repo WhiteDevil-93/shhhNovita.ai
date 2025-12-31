@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Disable specific checks that are not relevant for this project -->
+    <issue id="UnusedResources" severity="warning" />
+    <issue id="IconMissingDensityFolder" severity="warning" />
+    <issue id="MissingTranslation" severity="warning" />
+    <issue id="ContentDescription" severity="warning" />
+
+    <!-- Enable important checks -->
+    <issue id="HardcodedText" severity="warning" />
+    <issue id="NewApi" severity="error" />
+    <issue id="InlinedApi" severity="warning" />
+    <issue id="PrivateResource" severity="warning" />
+
+    <!-- Security checks -->
+    <issue id="SetJavaScriptEnabled" severity="error" />
+    <issue id="ExportedContentProvider" severity="error" />
+    <issue id="ExportedService" severity="error" />
+    <issue id="ExportedReceiver" severity="error" />
+
+    <!-- Performance checks -->
+    <issue id="UselessParent" severity="warning" />
+    <issue id="UnusedIds" severity="informational" />
+    <issue id="Overdraw" severity="warning" />
+
+    <!-- Compose specific -->
+    <issue id="ComposableNaming" severity="warning" />
+    <issue id="ComposableLambdaParameterNaming" severity="warning" />
+
+    <!-- Disable checks for generated code -->
+    <issue id="InvalidPackage">
+        <ignore path="**/build/**" />
+    </issue>
+</lint>
