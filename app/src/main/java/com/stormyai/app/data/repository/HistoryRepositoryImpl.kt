@@ -33,7 +33,7 @@ class HistoryRepositoryImpl(
     private fun HistoryEntity.toDomain() = HistoryItem(
         id = id,
         taskId = taskId,
-        type = GenerationType.valueOf(type),
+        type = runCatching { GenerationType.valueOf(type) }.getOrDefault(GenerationType.TEXT_TO_IMAGE),
         prompt = prompt,
         thumbnailUrl = thumbnailUrl,
         resultUrl = resultUrl,
