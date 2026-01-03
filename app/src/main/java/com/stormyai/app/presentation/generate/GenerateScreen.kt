@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.stormyai.app.domain.model.ModelProfile
@@ -189,13 +191,15 @@ private fun GenerateScreen(
                 value = state.width.toString(),
                 onValueChange = onWidthChange,
                 label = { Text("Width") },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             OutlinedTextField(
                 value = state.height.toString(),
                 onValueChange = onHeightChange,
                 label = { Text("Height") },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
         Text("Steps: ${state.steps}")
@@ -238,7 +242,8 @@ private fun GenerateScreen(
                 value = state.seed,
                 onValueChange = onSeedChange,
                 label = { Text("Seed") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
 
@@ -261,7 +266,8 @@ private fun GenerateScreen(
                 value = state.loraWeight,
                 onValueChange = onLoraWeightChange,
                 label = { Text("Weight (0-1)") },
-                modifier = Modifier.weight(0.6f)
+                modifier = Modifier.weight(0.6f),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
             )
         }
         Button(onClick = onAddLora) {
