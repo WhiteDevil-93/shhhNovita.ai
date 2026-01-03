@@ -63,7 +63,11 @@ class GenerateViewModel @Inject constructor(
 
         mutableUiState.value = current.copy(isGenerating = true, error = null)
         viewModelScope.launch {
-            val result = createImageUseCase(prompt = current.prompt)
+            val result = createImageUseCase(
+                prompt = current.prompt,
+                width = current.width,
+                height = current.height
+            )
             if (result.isSuccess) {
                 mutableUiState.value = uiState.value.copy(isGenerating = false)
             } else {
