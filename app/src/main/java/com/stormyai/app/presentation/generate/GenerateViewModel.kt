@@ -2,18 +2,19 @@ package com.stormyai.app.presentation.generate
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stormyai.app.common.MAX_DIMENSION
+import com.stormyai.app.common.MIN_DIMENSION
 import com.stormyai.app.domain.model.AiModel
 import com.stormyai.app.domain.usecase.CreateImageUseCase
 import com.stormyai.app.domain.usecase.GetModelsUseCase
 import com.stormyai.app.domain.usecase.PollTaskStatusUseCase
 import com.stormyai.app.domain.usecase.SaveToHistoryUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-
-private const val MIN_DIMENSION = 64
-private const val MAX_DIMENSION = 2048
+import javax.inject.Inject
 
 data class GenerateUiState(
     val prompt: String = "",
@@ -26,7 +27,8 @@ data class GenerateUiState(
     val error: String? = null
 )
 
-class GenerateViewModel(
+@HiltViewModel
+class GenerateViewModel @Inject constructor(
     private val createImageUseCase: CreateImageUseCase,
     private val pollTaskStatusUseCase: PollTaskStatusUseCase,
     private val saveToHistoryUseCase: SaveToHistoryUseCase,
@@ -61,7 +63,11 @@ class GenerateViewModel(
 
         mutableUiState.value = current.copy(isGenerating = true, error = null)
         viewModelScope.launch {
-            val result = createImageUseCase(prompt = current.prompt)
+            val result = createImageUseCase(
+                prompt = current.prompt,
+                width = current.width,
+                height = current.height
+            )
             if (result.isSuccess) {
                 mutableUiState.value = uiState.value.copy(isGenerating = false)
             } else {

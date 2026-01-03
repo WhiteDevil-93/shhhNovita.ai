@@ -56,6 +56,7 @@ data class HistoryItem(
 )
 
 data class UserSettings(
+    val apiKey: String? = null,
     val defaultModelId: String? = null,
     val defaultWidth: Int = 512,
     val defaultHeight: Int = 512,

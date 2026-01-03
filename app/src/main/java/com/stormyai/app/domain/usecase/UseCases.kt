@@ -90,3 +90,11 @@ class GetModelsUseCase(
         return generationRepository.getModels()
     }
 }
+
+class UpdateSettingsUseCase(
+    private val settingsRepository: SettingsRepository
+) {
+    suspend operator fun invoke(settings: UserSettings) {
+        settingsRepository.updateSettings(settings)
+    }
+}

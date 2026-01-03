@@ -12,6 +12,7 @@ interface GenerationRepository {
 
 interface SettingsRepository {
     fun getSettings(): Flow<UserSettings>
+    suspend fun updateSettings(settings: UserSettings)
 }
 
 interface HistoryRepository {
