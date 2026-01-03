@@ -5,6 +5,14 @@ import com.stormyai.app.domain.repository.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
+/**
+ * Creates an image generation task.
+ *
+ * @return Result<GenerationResult> Success with generation result, or Failure with:
+ *   - IllegalStateException if NSFW mode is requested with a profile that doesn't allow it
+ *   - IOException for network errors
+ *   - HttpException for API errors
+ */
 class CreateImageUseCase(
     private val generationRepository: GenerationRepository,
     private val settingsRepository: SettingsRepository,
@@ -128,6 +136,14 @@ class GetHistoryUseCase(
     }
 }
 
+/**
+ * Polls the status of a generation task.
+ *
+ * @param taskId The unique identifier of the task to poll
+ * @return Result<TaskStatus> Success with task status, or Failure with:
+ *   - IOException for network errors
+ *   - HttpException for API errors
+ */
 class PollTaskStatusUseCase(
     private val generationRepository: GenerationRepository
 ) {
@@ -136,14 +152,28 @@ class PollTaskStatusUseCase(
     }
 }
 
+/**
+ * Retrieves the list of available AI models.
+ *
+ * @return Result<List<AiModel>> Success with model list, or Failure with:
+ *   - IOException for network errors
+ *   - HttpException for API errors
+ */
 class GetModelsUseCase(
     private val generationRepository: GenerationRepository
 ) {
-    operator fun invoke(): Result<List<AiModel>> {
+    suspend operator fun invoke(): Result<List<AiModel>> {
         return generationRepository.getModels()
     }
 }
 
+/**
+ * Retrieves the list of available model profiles.
+ *
+ * @return Result<List<ModelProfile>> Success with profile list, or Failure with:
+ *   - IOException for network errors
+ *   - HttpException for API errors
+ */
 class GetProfilesUseCase(
     private val generationRepository: GenerationRepository
 ) {

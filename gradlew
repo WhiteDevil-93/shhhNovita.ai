@@ -114,7 +114,8 @@ case "$( uname )" in                #(
   NONSTOP* )        nonstop=true ;;
 esac
 
-CLASSPATH="\\\"\\\""
+# CLASSPATH set to empty; not used when -jar flag is specified but needed for cygpath conversion
+CLASSPATH=""
 
 
 # Determine the Java command to use to start the JVM.
