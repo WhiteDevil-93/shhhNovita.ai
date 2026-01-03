@@ -9,8 +9,17 @@ data class HistoryEntity(
     val taskId: String,
     val type: String,
     val prompt: String,
+    val negativePrompt: String?,
     val thumbnailUrl: String,
     val resultUrl: String,
     val modelName: String,
+    val sampler: String,
+    val steps: Int,
+    val cfgScale: Float,
+    val imageCount: Int,
+    val seed: Long?,
+    val highResFix: Boolean,
+    val faceRestore: Boolean,
+    val nsfw: Boolean,
     val createdAt: Long
 )

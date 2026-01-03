@@ -6,6 +6,7 @@ import com.stormyai.app.domain.repository.SettingsRepository
 import com.stormyai.app.domain.usecase.CreateImageUseCase
 import com.stormyai.app.domain.usecase.GetHistoryUseCase
 import com.stormyai.app.domain.usecase.GetModelsUseCase
+import com.stormyai.app.domain.usecase.GetProfilesUseCase
 import com.stormyai.app.domain.usecase.PollTaskStatusUseCase
 import com.stormyai.app.domain.usecase.SaveToHistoryUseCase
 import com.stormyai.app.domain.usecase.UpdateSettingsUseCase
@@ -50,6 +51,12 @@ object UseCaseModule {
     @Singleton
     fun provideGetModelsUseCase(generationRepository: GenerationRepository): GetModelsUseCase {
         return GetModelsUseCase(generationRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetProfilesUseCase(generationRepository: GenerationRepository): GetProfilesUseCase {
+        return GetProfilesUseCase(generationRepository)
     }
 
     @Provides

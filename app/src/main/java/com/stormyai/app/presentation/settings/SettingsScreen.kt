@@ -29,8 +29,11 @@ fun SettingsRoute(
         state = state,
         onApiKeyChange = viewModel::updateApiKey,
         onModelChange = viewModel::updateDefaultModelId,
+        onSamplerChange = viewModel::updateDefaultSampler,
         onWidthChange = viewModel::updateDefaultWidth,
         onHeightChange = viewModel::updateDefaultHeight,
+        onStepsChange = viewModel::updateDefaultSteps,
+        onCfgScaleChange = viewModel::updateDefaultCfgScale,
         onSaveHistoryChange = viewModel::updateSaveHistory,
         onSave = viewModel::saveSettings
     )
@@ -42,8 +45,11 @@ private fun SettingsScreen(
     state: SettingsUiState,
     onApiKeyChange: (String) -> Unit,
     onModelChange: (String) -> Unit,
+    onSamplerChange: (String) -> Unit,
     onWidthChange: (String) -> Unit,
     onHeightChange: (String) -> Unit,
+    onStepsChange: (String) -> Unit,
+    onCfgScaleChange: (String) -> Unit,
     onSaveHistoryChange: (Boolean) -> Unit,
     onSave: () -> Unit
 ) {
@@ -68,6 +74,12 @@ private fun SettingsScreen(
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
+            value = state.defaultSampler,
+            onValueChange = onSamplerChange,
+            label = { Text("Default Sampler") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
             value = state.defaultWidth,
             onValueChange = onWidthChange,
             label = { Text("Default Width") },
@@ -77,6 +89,18 @@ private fun SettingsScreen(
             value = state.defaultHeight,
             onValueChange = onHeightChange,
             label = { Text("Default Height") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = state.defaultSteps,
+            onValueChange = onStepsChange,
+            label = { Text("Default Steps") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = state.defaultCfgScale,
+            onValueChange = onCfgScaleChange,
+            label = { Text("Default CFG Scale") },
             modifier = Modifier.fillMaxWidth()
         )
         Column {
