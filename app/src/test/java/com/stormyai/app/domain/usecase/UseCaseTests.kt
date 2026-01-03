@@ -106,8 +106,17 @@ class SaveToHistoryUseCaseTest {
             taskId = "task_123",
             type = GenerationType.TEXT_TO_IMAGE,
             prompt = "Test prompt",
+            negativePrompt = null,
             resultUrl = "https://example.com/image.png",
-            modelName = "meinamix_v11"
+            modelName = "meinamix_v11",
+            sampler = "DPM++ SDE Karras",
+            steps = 30,
+            cfgScale = 7.0f,
+            imageCount = 1,
+            seed = null,
+            highResFix = false,
+            faceRestore = false,
+            nsfw = false
         )
 
         // Then
@@ -144,9 +153,18 @@ class GetHistoryUseCaseTest {
                 taskId = "task_1",
                 type = GenerationType.TEXT_TO_IMAGE,
                 prompt = "Prompt 1",
+                negativePrompt = null,
                 thumbnailUrl = "url1",
                 resultUrl = "url1",
                 modelName = "model1",
+                sampler = "DPM++ SDE Karras",
+                steps = 30,
+                cfgScale = 7.0f,
+                imageCount = 1,
+                seed = null,
+                highResFix = false,
+                faceRestore = false,
+                nsfw = false,
                 createdAt = 1000L
             )
         )

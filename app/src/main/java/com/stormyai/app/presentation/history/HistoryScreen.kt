@@ -3,8 +3,11 @@ package com.stormyai.app.presentation.history
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,13 +23,14 @@ fun HistoryRoute(
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
     val items by viewModel.items.collectAsState()
-    HistoryScreen(paddingValues, items)
+    HistoryScreen(paddingValues, items, viewModel::remix)
 }
 
 @Composable
 private fun HistoryScreen(
     paddingValues: PaddingValues,
-    items: List<com.stormyai.app.domain.model.HistoryItem>
+    items: List<com.stormyai.app.domain.model.HistoryItem>,
+    onRemix: (com.stormyai.app.domain.model.HistoryItem) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -41,6 +45,16 @@ private fun HistoryScreen(
         } else {
             items.forEach { item ->
                 Text("${item.prompt} (${item.type})")
+                Text("Model: ${item.modelName} • Sampler: ${item.sampler}")
+                Text("Steps: ${item.steps} • CFG: ${item.cfgScale} • Seed: ${item.seed ?: "Random"}")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(onClick = { onRemix(item) }) {
+                        Text("Remix")
+                    }
+                }
             }
         }
     }

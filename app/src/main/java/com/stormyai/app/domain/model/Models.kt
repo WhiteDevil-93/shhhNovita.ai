@@ -6,6 +6,13 @@ enum class ModelType {
     VIDEO_GENERATION
 }
 
+enum class ModelCapability {
+    REALISTIC,
+    ANIME,
+    NSFW,
+    PORTRAIT
+}
+
 enum class GenerationType {
     TEXT_TO_IMAGE,
     IMAGE_TO_IMAGE,
@@ -18,6 +25,16 @@ enum class TaskStatus {
     SUCCEEDED,
     FAILED
 }
+
+data class ModelProfile(
+    val id: String,
+    val name: String,
+    val modelId: String,
+    val vaeId: String?,
+    val type: ModelType,
+    val capabilities: Set<ModelCapability>,
+    val nsfwAllowed: Boolean
+)
 
 data class AiModel(
     val id: String,
@@ -34,7 +51,15 @@ data class GenerationTask(
     val height: Int,
     val steps: Int,
     val cfgScale: Float,
+    val sampler: String,
+    val imageCount: Int,
+    val seed: Long?,
+    val highResFix: Boolean,
+    val faceRestore: Boolean,
+    val nsfw: Boolean,
     val modelId: String?,
+    val vaeId: String?,
+    val profileId: String?,
     val loras: List<Lora>,
     val type: GenerationType
 )
@@ -57,15 +82,25 @@ data class HistoryItem(
     val taskId: String,
     val type: GenerationType,
     val prompt: String,
+    val negativePrompt: String?,
     val thumbnailUrl: String,
     val resultUrl: String,
     val modelName: String,
+    val sampler: String,
+    val steps: Int,
+    val cfgScale: Float,
+    val imageCount: Int,
+    val seed: Long?,
+    val highResFix: Boolean,
+    val faceRestore: Boolean,
+    val nsfw: Boolean,
     val createdAt: Long
 )
 
 data class UserSettings(
     val apiKey: String? = null,
     val defaultModelId: String? = null,
+    val defaultSampler: String = "DPM++ SDE Karras",
     val defaultWidth: Int = 512,
     val defaultHeight: Int = 512,
     val defaultSteps: Int = 30,

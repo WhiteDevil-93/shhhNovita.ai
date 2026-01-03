@@ -27,6 +27,7 @@ class SettingsViewModel @Inject constructor(
                 mutableState.value = SettingsUiState(
                     apiKey = settings.apiKey.orEmpty(),
                     defaultModelId = settings.defaultModelId.orEmpty(),
+                    defaultSampler = settings.defaultSampler,
                     defaultWidth = settings.defaultWidth.toString(),
                     defaultHeight = settings.defaultHeight.toString(),
                     defaultSteps = settings.defaultSteps.toString(),
@@ -53,6 +54,10 @@ class SettingsViewModel @Inject constructor(
         mutableState.value = state.value.copy(defaultHeight = value)
     }
 
+    fun updateDefaultSampler(value: String) {
+        mutableState.value = state.value.copy(defaultSampler = value)
+    }
+
     fun updateDefaultSteps(value: String) {
         mutableState.value = state.value.copy(defaultSteps = value)
     }
@@ -72,6 +77,7 @@ class SettingsViewModel @Inject constructor(
                 UserSettings(
                     apiKey = current.apiKey.ifBlank { null },
                     defaultModelId = current.defaultModelId.ifBlank { null },
+                    defaultSampler = current.defaultSampler.ifBlank { "DPM++ SDE Karras" },
                     defaultWidth = current.defaultWidth.toIntOrNull() ?: 512,
                     defaultHeight = current.defaultHeight.toIntOrNull() ?: 512,
                     defaultSteps = current.defaultSteps.toIntOrNull() ?: 30,
@@ -86,6 +92,7 @@ class SettingsViewModel @Inject constructor(
 data class SettingsUiState(
     val apiKey: String = "",
     val defaultModelId: String = "",
+    val defaultSampler: String = "DPM++ SDE Karras",
     val defaultWidth: String = "512",
     val defaultHeight: String = "512",
     val defaultSteps: String = "30",

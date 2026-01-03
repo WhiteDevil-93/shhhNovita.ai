@@ -29,6 +29,7 @@ fun SettingsRoute(
         state = state,
         onApiKeyChange = viewModel::updateApiKey,
         onModelChange = viewModel::updateDefaultModelId,
+        onSamplerChange = viewModel::updateDefaultSampler,
         onWidthChange = viewModel::updateDefaultWidth,
         onHeightChange = viewModel::updateDefaultHeight,
         onStepsChange = viewModel::updateDefaultSteps,
@@ -44,6 +45,7 @@ private fun SettingsScreen(
     state: SettingsUiState,
     onApiKeyChange: (String) -> Unit,
     onModelChange: (String) -> Unit,
+    onSamplerChange: (String) -> Unit,
     onWidthChange: (String) -> Unit,
     onHeightChange: (String) -> Unit,
     onStepsChange: (String) -> Unit,
@@ -69,6 +71,12 @@ private fun SettingsScreen(
             value = state.defaultModelId,
             onValueChange = onModelChange,
             label = { Text("Default Model ID") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = state.defaultSampler,
+            onValueChange = onSamplerChange,
+            label = { Text("Default Sampler") },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(

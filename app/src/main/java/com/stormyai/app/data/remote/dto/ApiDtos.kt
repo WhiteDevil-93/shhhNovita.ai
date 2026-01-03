@@ -10,7 +10,14 @@ data class TextToImageRequest(
     @SerializedName("height") val height: Int,
     @SerializedName("steps") val steps: Int,
     @SerializedName("cfg_scale") val cfgScale: Float,
+    @SerializedName("sampler") val sampler: String,
+    @SerializedName("num_images") val imageCount: Int,
+    @SerializedName("seed") val seed: Long?,
+    @SerializedName("high_res_fix") val highResFix: Boolean,
+    @SerializedName("face_restore") val faceRestore: Boolean,
+    @SerializedName("nsfw") val nsfw: Boolean,
     @SerializedName("model_id") val modelId: String?,
+    @SerializedName("vae_id") val vaeId: String?,
     @SerializedName("loras") val loras: List<LoraRequest>
 )
 
@@ -21,7 +28,14 @@ data class TextToVideoRequest(
     @SerializedName("height") val height: Int,
     @SerializedName("steps") val steps: Int,
     @SerializedName("cfg_scale") val cfgScale: Float,
+    @SerializedName("sampler") val sampler: String,
+    @SerializedName("num_images") val imageCount: Int,
+    @SerializedName("seed") val seed: Long?,
+    @SerializedName("high_res_fix") val highResFix: Boolean,
+    @SerializedName("face_restore") val faceRestore: Boolean,
+    @SerializedName("nsfw") val nsfw: Boolean,
     @SerializedName("model_id") val modelId: String?,
+    @SerializedName("vae_id") val vaeId: String?,
     @SerializedName("loras") val loras: List<LoraRequest>
 )
 

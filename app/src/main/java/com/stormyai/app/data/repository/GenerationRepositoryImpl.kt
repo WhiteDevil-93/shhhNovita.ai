@@ -37,21 +37,58 @@ class GenerationRepositoryImpl(
 
     override fun getModels(): Result<List<AiModel>> {
         return Result.success(
-            listOf(
+            getDefaultProfiles().map { profile ->
                 AiModel(
-                    id = "meinamix_v11",
-                    name = "MeinaMix v11",
-                    type = ModelType.IMAGE_GENERATION,
-                    supportsNegativePrompt = true,
-                    supportsHighResolution = true
-                ),
-                AiModel(
-                    id = "dreamshaper_v8",
-                    name = "DreamShaper v8",
-                    type = ModelType.IMAGE_GENERATION,
+                    id = profile.modelId,
+                    name = profile.name,
+                    type = profile.type,
                     supportsNegativePrompt = true,
                     supportsHighResolution = true
                 )
+            }
+        )
+    }
+
+    override fun getProfiles(): Result<List<com.stormyai.app.domain.model.ModelProfile>> {
+        return Result.success(getDefaultProfiles())
+    }
+
+    private fun getDefaultProfiles(): List<com.stormyai.app.domain.model.ModelProfile> {
+        return listOf(
+            com.stormyai.app.domain.model.ModelProfile(
+                id = "realism_base",
+                name = "Realism Base (Model + VAE)",
+                modelId = "meinamix_v11",
+                vaeId = "vae-clear",
+                type = ModelType.IMAGE_GENERATION,
+                capabilities = setOf(
+                    com.stormyai.app.domain.model.ModelCapability.REALISTIC,
+                    com.stormyai.app.domain.model.ModelCapability.PORTRAIT
+                ),
+                nsfwAllowed = false
+            ),
+            com.stormyai.app.domain.model.ModelProfile(
+                id = "cinematic_realism",
+                name = "Cinematic Realism (Model + VAE)",
+                modelId = "dreamshaper_v8",
+                vaeId = "vae-clarity",
+                type = ModelType.IMAGE_GENERATION,
+                capabilities = setOf(
+                    com.stormyai.app.domain.model.ModelCapability.REALISTIC
+                ),
+                nsfwAllowed = false
+            ),
+            com.stormyai.app.domain.model.ModelProfile(
+                id = "nsfw_realism",
+                name = "NSFW Realism (Model + VAE)",
+                modelId = "realistic_vision_v6",
+                vaeId = "vae-nsfw",
+                type = ModelType.IMAGE_GENERATION,
+                capabilities = setOf(
+                    com.stormyai.app.domain.model.ModelCapability.REALISTIC,
+                    com.stormyai.app.domain.model.ModelCapability.NSFW
+                ),
+                nsfwAllowed = true
             )
         )
     }
@@ -64,7 +101,14 @@ class GenerationRepositoryImpl(
             height = height,
             steps = steps,
             cfgScale = cfgScale,
+            sampler = sampler,
+            imageCount = imageCount,
+            seed = seed,
+            highResFix = highResFix,
+            faceRestore = faceRestore,
+            nsfw = nsfw,
             modelId = modelId,
+            vaeId = vaeId,
             loras = loras.map { it.toRequest() }
         )
 
@@ -76,7 +120,14 @@ class GenerationRepositoryImpl(
             height = height,
             steps = steps,
             cfgScale = cfgScale,
+            sampler = sampler,
+            imageCount = imageCount,
+            seed = seed,
+            highResFix = highResFix,
+            faceRestore = faceRestore,
+            nsfw = nsfw,
             modelId = modelId,
+            vaeId = vaeId,
             loras = loras.map { it.toRequest() }
         )
 

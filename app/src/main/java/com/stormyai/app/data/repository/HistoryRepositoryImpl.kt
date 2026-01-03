@@ -24,9 +24,18 @@ class HistoryRepositoryImpl(
         taskId = taskId,
         type = type.name,
         prompt = prompt,
+        negativePrompt = negativePrompt,
         thumbnailUrl = thumbnailUrl,
         resultUrl = resultUrl,
         modelName = modelName,
+        sampler = sampler,
+        steps = steps,
+        cfgScale = cfgScale,
+        imageCount = imageCount,
+        seed = seed,
+        highResFix = highResFix,
+        faceRestore = faceRestore,
+        nsfw = nsfw,
         createdAt = createdAt
     )
 
@@ -35,9 +44,18 @@ class HistoryRepositoryImpl(
         taskId = taskId,
         type = GenerationType.valueOf(type),
         prompt = prompt,
+        negativePrompt = negativePrompt,
         thumbnailUrl = thumbnailUrl,
         resultUrl = resultUrl,
         modelName = modelName,
+        sampler = sampler,
+        steps = steps,
+        cfgScale = cfgScale,
+        imageCount = imageCount,
+        seed = seed,
+        highResFix = highResFix,
+        faceRestore = faceRestore,
+        nsfw = nsfw,
         createdAt = createdAt
     )
 }

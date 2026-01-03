@@ -17,10 +17,21 @@ class CreateImageUseCase(
         height: Int? = null,
         steps: Int? = null,
         cfgScale: Float? = null,
+        sampler: String? = null,
+        imageCount: Int? = null,
+        seed: Long? = null,
+        highResFix: Boolean = false,
+        faceRestore: Boolean = false,
+        nsfw: Boolean = false,
+        profile: ModelProfile? = null,
         modelId: String? = null,
         loras: List<Lora> = emptyList()
     ): Result<GenerationResult> {
         val settings = settingsRepository.getSettings().first()
+        val resolvedModelId = profile?.modelId ?: modelId ?: settings.defaultModelId
+        if (nsfw && profile?.nsfwAllowed == false) {
+            return Result.failure(IllegalStateException("Selected profile does not allow NSFW mode"))
+        }
         val task = GenerationTask(
             prompt = prompt,
             negativePrompt = negativePrompt,
@@ -28,7 +39,15 @@ class CreateImageUseCase(
             height = height ?: settings.defaultHeight,
             steps = steps ?: settings.defaultSteps,
             cfgScale = cfgScale ?: settings.defaultCfgScale,
-            modelId = modelId ?: settings.defaultModelId,
+            sampler = sampler ?: settings.defaultSampler,
+            imageCount = imageCount ?: 1,
+            seed = seed,
+            highResFix = highResFix,
+            faceRestore = faceRestore,
+            nsfw = nsfw,
+            modelId = resolvedModelId,
+            vaeId = profile?.vaeId,
+            profileId = profile?.id,
             loras = loras,
             type = GenerationType.TEXT_TO_IMAGE
         )
@@ -40,9 +59,18 @@ class CreateImageUseCase(
                     taskId = generated.taskId,
                     type = generated.type,
                     prompt = prompt,
+                    negativePrompt = negativePrompt,
                     thumbnailUrl = generated.imageUrl.orEmpty(),
                     resultUrl = generated.imageUrl.orEmpty(),
-                    modelName = settings.defaultModelId ?: "",
+                    modelName = profile?.name ?: resolvedModelId.orEmpty(),
+                    sampler = task.sampler,
+                    steps = task.steps,
+                    cfgScale = task.cfgScale,
+                    imageCount = task.imageCount,
+                    seed = task.seed,
+                    highResFix = task.highResFix,
+                    faceRestore = task.faceRestore,
+                    nsfw = task.nsfw,
                     createdAt = System.currentTimeMillis()
                 )
             )
@@ -58,16 +86,34 @@ class SaveToHistoryUseCase(
         taskId: String,
         type: GenerationType,
         prompt: String,
+        negativePrompt: String?,
         resultUrl: String,
-        modelName: String
+        modelName: String,
+        sampler: String,
+        steps: Int,
+        cfgScale: Float,
+        imageCount: Int,
+        seed: Long?,
+        highResFix: Boolean,
+        faceRestore: Boolean,
+        nsfw: Boolean
     ): Long {
         val item = HistoryItem(
             taskId = taskId,
             type = type,
             prompt = prompt,
+            negativePrompt = negativePrompt,
             thumbnailUrl = resultUrl,
             resultUrl = resultUrl,
             modelName = modelName,
+            sampler = sampler,
+            steps = steps,
+            cfgScale = cfgScale,
+            imageCount = imageCount,
+            seed = seed,
+            highResFix = highResFix,
+            faceRestore = faceRestore,
+            nsfw = nsfw,
             createdAt = System.currentTimeMillis()
         )
         return historyRepository.saveHistoryItem(item)
@@ -95,6 +141,14 @@ class GetModelsUseCase(
 ) {
     operator fun invoke(): Result<List<AiModel>> {
         return generationRepository.getModels()
+    }
+}
+
+class GetProfilesUseCase(
+    private val generationRepository: GenerationRepository
+) {
+    operator fun invoke(): Result<List<ModelProfile>> {
+        return generationRepository.getProfiles()
     }
 }
 

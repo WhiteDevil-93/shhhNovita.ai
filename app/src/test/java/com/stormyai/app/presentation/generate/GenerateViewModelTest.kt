@@ -28,6 +28,9 @@ class GenerateViewModelTest {
     @MockK
     private lateinit var getModelsUseCase: GetModelsUseCase
 
+    @MockK
+    private lateinit var getProfilesUseCase: GetProfilesUseCase
+
     private lateinit var viewModel: GenerateViewModel
 
     private val testDispatcher = StandardTestDispatcher()
@@ -39,6 +42,7 @@ class GenerateViewModelTest {
 
         // Setup default mocks
         every { getModelsUseCase() } returns Result.success(emptyList())
+        every { getProfilesUseCase() } returns Result.success(emptyList())
     }
 
     @After
@@ -60,7 +64,8 @@ class GenerateViewModelTest {
             createImageUseCase,
             pollTaskStatusUseCase,
             saveToHistoryUseCase,
-            getModelsUseCase
+            getModelsUseCase,
+            getProfilesUseCase
         )
         advanceUntilIdle()
 
@@ -78,7 +83,8 @@ class GenerateViewModelTest {
             createImageUseCase,
             pollTaskStatusUseCase,
             saveToHistoryUseCase,
-            getModelsUseCase
+            getModelsUseCase,
+            getProfilesUseCase
         )
         advanceUntilIdle()
 
@@ -96,7 +102,8 @@ class GenerateViewModelTest {
             createImageUseCase,
             pollTaskStatusUseCase,
             saveToHistoryUseCase,
-            getModelsUseCase
+            getModelsUseCase,
+            getProfilesUseCase
         )
         advanceUntilIdle()
 
@@ -115,7 +122,8 @@ class GenerateViewModelTest {
             createImageUseCase,
             pollTaskStatusUseCase,
             saveToHistoryUseCase,
-            getModelsUseCase
+            getModelsUseCase,
+            getProfilesUseCase
         )
         advanceUntilIdle()
 

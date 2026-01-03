@@ -2,6 +2,7 @@ package com.stormyai.app.presentation.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stormyai.app.common.RemixStore
 import com.stormyai.app.domain.model.HistoryItem
 import com.stormyai.app.domain.usecase.GetHistoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,5 +26,9 @@ class HistoryViewModel @Inject constructor(
                 mutableItems.value = history
             }
         }
+    }
+
+    fun remix(item: HistoryItem) {
+        RemixStore.set(item)
     }
 }
