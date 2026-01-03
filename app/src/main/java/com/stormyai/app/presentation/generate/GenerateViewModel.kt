@@ -1,0 +1,87 @@
+package com.stormyai.app.presentation.generate
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.stormyai.app.domain.model.AiModel
+import com.stormyai.app.domain.usecase.CreateImageUseCase
+import com.stormyai.app.domain.usecase.GetModelsUseCase
+import com.stormyai.app.domain.usecase.PollTaskStatusUseCase
+import com.stormyai.app.domain.usecase.SaveToHistoryUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+private const val MIN_DIMENSION = 64
+private const val MAX_DIMENSION = 2048
+
+data class GenerateUiState(
+    val prompt: String = "",
+    val models: List<AiModel> = emptyList(),
+    val selectedModel: AiModel? = null,
+    val width: Int = 512,
+    val height: Int = 512,
+    val isLoading: Boolean = true,
+    val isGenerating: Boolean = false,
+    val error: String? = null
+)
+
+class GenerateViewModel(
+    private val createImageUseCase: CreateImageUseCase,
+    private val pollTaskStatusUseCase: PollTaskStatusUseCase,
+    private val saveToHistoryUseCase: SaveToHistoryUseCase,
+    private val getModelsUseCase: GetModelsUseCase
+) : ViewModel() {
+
+    private val mutableUiState = MutableStateFlow(GenerateUiState())
+    val uiState: StateFlow<GenerateUiState> = mutableUiState.asStateFlow()
+
+    init {
+        loadModels()
+    }
+
+    fun updatePrompt(value: String) {
+        mutableUiState.value = uiState.value.copy(prompt = value, error = null)
+    }
+
+    fun updateWidth(value: Int) {
+        val clamped = value.coerceIn(MIN_DIMENSION, MAX_DIMENSION)
+        mutableUiState.value = uiState.value.copy(width = clamped)
+    }
+
+    fun generate() {
+        val current = uiState.value
+        if (current.prompt.isBlank()) {
+            mutableUiState.value = current.copy(
+                error = "Please enter a prompt",
+                isGenerating = false
+            )
+            return
+        }
+
+        mutableUiState.value = current.copy(isGenerating = true, error = null)
+        viewModelScope.launch {
+            val result = createImageUseCase(prompt = current.prompt)
+            if (result.isSuccess) {
+                mutableUiState.value = uiState.value.copy(isGenerating = false)
+            } else {
+                mutableUiState.value = uiState.value.copy(
+                    isGenerating = false,
+                    error = result.exceptionOrNull()?.message ?: "Generation failed"
+                )
+            }
+        }
+    }
+
+    private fun loadModels() {
+        viewModelScope.launch {
+            val result = getModelsUseCase()
+            val models = result.getOrDefault(emptyList())
+            mutableUiState.value = uiState.value.copy(
+                models = models,
+                selectedModel = models.firstOrNull(),
+                isLoading = false
+            )
+        }
+    }
+}
