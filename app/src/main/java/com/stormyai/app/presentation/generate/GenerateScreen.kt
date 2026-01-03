@@ -60,10 +60,31 @@ fun GenerateRoute(
         state = state,
         onPromptChange = viewModel::updatePrompt,
         onNegativePromptChange = viewModel::updateNegativePrompt,
-        onWidthChange = { value -> value.toIntOrNull()?.let(viewModel::updateWidth) },
-        onHeightChange = { value -> value.toIntOrNull()?.let(viewModel::updateHeight) },
-        onStepsChange = { value -> value.toIntOrNull()?.let(viewModel::updateSteps) },
-        onCfgScaleChange = { value -> value.toFloatOrNull()?.let(viewModel::updateCfgScale) },
+        onWidthChange = { value ->
+            if (value.isNotEmpty() && value.all { it.isDigit() }) {
+                viewModel.updateWidth(value.toInt())
+            }
+        },
+        onHeightChange = { value ->
+            if (value.isNotEmpty() && value.all { it.isDigit() }) {
+                viewModel.updateHeight(value.toInt())
+            }
+        },
+        onStepsChange = { value ->
+            if (value.isNotEmpty() && value.all { it.isDigit() }) {
+                viewModel.updateSteps(value.toInt())
+            }
+        },
+        onCfgScaleChange = { value ->
+            // Allow digits and a decimal point; reject anything else
+            val sanitized = value.replace(',', '.')
+            val isValidFloat = sanitized.isNotEmpty() &&
+                sanitized.count { it == '.' } <= 1 &&
+                sanitized.all { it.isDigit() || it == '.' }
+            if (isValidFloat) {
+                viewModel.updateCfgScale(sanitized.toFloat())
+            }
+        },
         onSamplerChange = viewModel::updateSampler,
         onImageCountChange = viewModel::updateImageCount,
         onSeedModeChange = viewModel::updateSeedMode,
