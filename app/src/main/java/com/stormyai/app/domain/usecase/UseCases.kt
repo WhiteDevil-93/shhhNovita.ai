@@ -5,6 +5,19 @@ import com.stormyai.app.domain.repository.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
+/**
+ * Use case for creating an image generation task.
+ * 
+ * @return Result wrapping GenerationResult on success, or wrapping an exception on failure.
+ * 
+ * Possible error cases:
+ * - Network errors (IOException, SocketTimeoutException)
+ * - API errors (HttpException with status codes)
+ * - Validation errors (IllegalStateException for invalid parameters)
+ * - JSON parsing errors (SerializationException)
+ * 
+ * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ */
 class CreateImageUseCase(
     private val generationRepository: GenerationRepository,
     private val settingsRepository: SettingsRepository,
@@ -128,6 +141,19 @@ class GetHistoryUseCase(
     }
 }
 
+/**
+ * Use case for polling the status of a generation task.
+ * 
+ * @param taskId The unique identifier of the task to poll.
+ * @return Result wrapping TaskStatus on success, or wrapping an exception on failure.
+ * 
+ * Possible error cases:
+ * - Network errors (IOException, SocketTimeoutException)
+ * - API errors (HttpException with status codes like 404 for unknown task)
+ * - JSON parsing errors (SerializationException)
+ * 
+ * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ */
 class PollTaskStatusUseCase(
     private val generationRepository: GenerationRepository
 ) {
@@ -136,18 +162,44 @@ class PollTaskStatusUseCase(
     }
 }
 
+/**
+ * Use case for retrieving available AI models.
+ * 
+ * @return Result wrapping a list of AiModel on success, or wrapping an exception on failure.
+ * 
+ * Possible error cases:
+ * - Network errors (IOException, SocketTimeoutException) - when fetching from API
+ * - API errors (HttpException with status codes) - when fetching from API
+ * 
+ * Note: Current implementation returns hardcoded models and does not fail.
+ * 
+ * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ */
 class GetModelsUseCase(
     private val generationRepository: GenerationRepository
 ) {
-    operator fun invoke(): Result<List<AiModel>> {
+    suspend operator fun invoke(): Result<List<AiModel>> {
         return generationRepository.getModels()
     }
 }
 
+/**
+ * Use case for retrieving model profiles with pre-configured settings.
+ * 
+ * @return Result wrapping a list of ModelProfile on success, or wrapping an exception on failure.
+ * 
+ * Possible error cases:
+ * - Network errors (IOException, SocketTimeoutException) - when fetching from API
+ * - API errors (HttpException with status codes) - when fetching from API
+ * 
+ * Note: Current implementation returns hardcoded profiles and does not fail.
+ * 
+ * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ */
 class GetProfilesUseCase(
     private val generationRepository: GenerationRepository
 ) {
-    operator fun invoke(): Result<List<ModelProfile>> {
+    suspend operator fun invoke(): Result<List<ModelProfile>> {
         return generationRepository.getProfiles()
     }
 }

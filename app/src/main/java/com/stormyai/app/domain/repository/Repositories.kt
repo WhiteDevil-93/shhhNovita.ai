@@ -7,8 +7,8 @@ interface GenerationRepository {
     suspend fun generateImage(task: GenerationTask): Result<GenerationResult>
     suspend fun generateVideo(task: GenerationTask): Result<GenerationResult>
     suspend fun pollTaskStatus(taskId: String): Result<TaskStatus>
-    fun getModels(): Result<List<AiModel>>
-    fun getProfiles(): Result<List<ModelProfile>>
+    suspend fun getModels(): Result<List<AiModel>>
+    suspend fun getProfiles(): Result<List<ModelProfile>>
 }
 
 interface SettingsRepository {
