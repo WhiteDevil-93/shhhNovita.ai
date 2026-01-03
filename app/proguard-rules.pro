@@ -28,5 +28,5 @@
 -keep class * implements dagger.hilt.internal.GeneratedComponent { *; }
 
 # Keep our data models
--keep class com.novitaai.studio.data.remote.dto.** { *; }
--keep class com.novitaai.studio.domain.model.** { *; }
+-keep class com.stormyai.app.data.remote.dto.** { *; }
+-keep class com.stormyai.app.domain.model.** { *; }
