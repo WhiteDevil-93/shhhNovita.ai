@@ -6,17 +6,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 /**
- * Use case for creating an image generation task.
- * 
- * @return Result wrapping GenerationResult on success, or wrapping an exception on failure.
- * 
- * Possible error cases:
- * - Network errors (IOException, SocketTimeoutException)
- * - API errors (HttpException with status codes)
- * - Validation errors (IllegalStateException for invalid parameters)
- * - JSON parsing errors (SerializationException)
- * 
- * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ * Creates an image generation task.
+ *
+ * @return Result<GenerationResult> Success with generation result, or Failure with:
+ *   - IllegalStateException if NSFW mode is requested with a profile that doesn't allow it
+ *   - IOException for network errors
+ *   - HttpException for API errors
  */
 class CreateImageUseCase(
     private val generationRepository: GenerationRepository,
@@ -142,17 +137,12 @@ class GetHistoryUseCase(
 }
 
 /**
- * Use case for polling the status of a generation task.
- * 
- * @param taskId The unique identifier of the task to poll.
- * @return Result wrapping TaskStatus on success, or wrapping an exception on failure.
- * 
- * Possible error cases:
- * - Network errors (IOException, SocketTimeoutException)
- * - API errors (HttpException with status codes like 404 for unknown task)
- * - JSON parsing errors (SerializationException)
- * 
- * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ * Polls the status of a generation task.
+ *
+ * @param taskId The unique identifier of the task to poll
+ * @return Result<TaskStatus> Success with task status, or Failure with:
+ *   - IOException for network errors
+ *   - HttpException for API errors
  */
 class PollTaskStatusUseCase(
     private val generationRepository: GenerationRepository
@@ -163,17 +153,11 @@ class PollTaskStatusUseCase(
 }
 
 /**
- * Use case for retrieving available AI models.
- * 
- * @return Result wrapping a list of AiModel on success, or wrapping an exception on failure.
- * 
- * Possible error cases:
- * - Network errors (IOException, SocketTimeoutException) - when fetching from API
- * - API errors (HttpException with status codes) - when fetching from API
- * 
- * Note: Current implementation returns hardcoded models and does not fail.
- * 
- * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ * Retrieves the list of available AI models.
+ *
+ * @return Result<List<AiModel>> Success with model list, or Failure with:
+ *   - IOException for network errors
+ *   - HttpException for API errors
  */
 class GetModelsUseCase(
     private val generationRepository: GenerationRepository
@@ -184,17 +168,11 @@ class GetModelsUseCase(
 }
 
 /**
- * Use case for retrieving model profiles with pre-configured settings.
- * 
- * @return Result wrapping a list of ModelProfile on success, or wrapping an exception on failure.
- * 
- * Possible error cases:
- * - Network errors (IOException, SocketTimeoutException) - when fetching from API
- * - API errors (HttpException with status codes) - when fetching from API
- * 
- * Note: Current implementation returns hardcoded profiles and does not fail.
- * 
- * Callers should handle errors using Result.onFailure or Result.getOrNull.
+ * Retrieves the list of available model profiles.
+ *
+ * @return Result<List<ModelProfile>> Success with profile list, or Failure with:
+ *   - IOException for network errors
+ *   - HttpException for API errors
  */
 class GetProfilesUseCase(
     private val generationRepository: GenerationRepository

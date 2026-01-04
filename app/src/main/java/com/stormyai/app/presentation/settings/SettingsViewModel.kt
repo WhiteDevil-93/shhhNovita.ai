@@ -76,9 +76,10 @@ class SettingsViewModel @Inject constructor(
         // Validate API key
         if (current.apiKey.isBlank()) {
             mutableState.value = current.copy(
-                error = "Warning: API key is required for generation to work"
+                validationMessage = "Warning: API key is empty. Generation will not work without a valid API key."
             )
-            // Allow save to continue even with warning
+        } else {
+            mutableState.value = current.copy(validationMessage = null)
         }
         
         viewModelScope.launch {
@@ -107,5 +108,5 @@ data class SettingsUiState(
     val defaultSteps: String = "30",
     val defaultCfgScale: String = "7.0",
     val saveHistory: Boolean = true,
-    val error: String? = null
+    val validationMessage: String? = null
 )

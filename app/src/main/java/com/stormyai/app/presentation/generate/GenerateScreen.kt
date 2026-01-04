@@ -79,12 +79,7 @@ fun GenerateRoute(
         },
         onCfgScaleChange = { value ->
             val sanitized = value.replace(',', '.')
-            val isValidFloat = sanitized.isNotEmpty() &&
-                sanitized.count { it == '.' } <= 1 &&
-                sanitized.all { it.isDigit() || it == '.' }
-            if (isValidFloat) {
-                sanitized.toFloatOrNull()?.let(viewModel::updateCfgScale)
-            }
+            sanitized.toFloatOrNull()?.let { viewModel.updateCfgScale(it) }
         },
         onSamplerChange = viewModel::updateSampler,
         onImageCountChange = viewModel::updateImageCount,

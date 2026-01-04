@@ -13,15 +13,11 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * OkHttp interceptor that adds authentication headers to API requests.
  * 
- * PERFORMANCE NOTE: This implementation uses runBlocking() to retrieve the API key
- * from DataStore, which blocks the network thread. This is a known limitation that
- * can potentially cause thread starvation or ANR issues in high-traffic scenarios.
+ * This interceptor observes settings changes and maintains an up-to-date API key
+ * in memory to avoid blocking the network thread during authentication.
  * 
- * TODO: Consider restructuring the authentication flow to avoid blocking operations
- * in the interceptor, such as:
- * - Passing the API key synchronously through a different mechanism
- * - Caching the API key in memory with reactive updates
- * - Using a custom authenticator pattern
+ * Note: The coroutine scope is intentionally application-scoped since this is a
+ * singleton injected by Hilt and should live for the entire app lifecycle.
  */
 class AuthInterceptor(
     private val settingsRepository: SettingsRepository
@@ -31,9 +27,13 @@ class AuthInterceptor(
     private val apiKeyRef = AtomicReference<String?>(null)
 
     init {
+        // Initialize and observe API key changes
+        // This Flow collection runs for the lifetime of the app, which is intentional
+        // for a singleton component managed by Hilt
         scope.launch {
-            val settings = settingsRepository.getSettings().first()
-            apiKeyRef.set(settings.apiKey)
+            settingsRepository.getSettings().collect { settings ->
+                apiKeyRef.set(settings.apiKey)
+            }
         }
     }
 

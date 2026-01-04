@@ -117,8 +117,12 @@ private fun SettingsScreen(
             )
         }
         
-        state.error?.let { error ->
-            Text(text = error)
+        state.validationMessage?.let { message ->
+            Text(
+                text = message,
+                color = androidx.compose.ui.graphics.Color.Red,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
         }
         
         Button(onClick = onSave) {

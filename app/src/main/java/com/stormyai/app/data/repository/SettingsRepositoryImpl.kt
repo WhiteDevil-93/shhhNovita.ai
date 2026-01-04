@@ -1,5 +1,7 @@
 package com.stormyai.app.data.repository
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -7,6 +9,8 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.stormyai.app.common.DEFAULT_HEIGHT
 import com.stormyai.app.common.DEFAULT_WIDTH
 import com.stormyai.app.domain.model.UserSettings
@@ -24,13 +28,27 @@ import kotlinx.coroutines.flow.map
  * store sensitive credentials like API keys.
  */
 class SettingsRepositoryImpl(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    context: Context
 ) : SettingsRepository {
+
+    // Use EncryptedSharedPreferences for API key storage
+    private val masterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
+
+    private val encryptedPrefs: SharedPreferences = EncryptedSharedPreferences.create(
+        context,
+        "secure_prefs",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
 
     override fun getSettings(): Flow<UserSettings> {
         return dataStore.data.map { preferences ->
             UserSettings(
-                apiKey = preferences[API_KEY],
+                apiKey = encryptedPrefs.getString(ENCRYPTED_API_KEY, null),
                 defaultModelId = preferences[DEFAULT_MODEL_ID],
                 defaultSampler = preferences[DEFAULT_SAMPLER] ?: DEFAULT_SAMPLER_VALUE,
                 defaultWidth = preferences[KEY_DEFAULT_WIDTH] ?: DEFAULT_WIDTH,
@@ -43,12 +61,18 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun updateSettings(settings: UserSettings) {
-        dataStore.edit { prefs ->
+        // Store API key in encrypted preferences
+        with(encryptedPrefs.edit()) {
             if (settings.apiKey.isNullOrBlank()) {
-                prefs.remove(API_KEY)
+                remove(ENCRYPTED_API_KEY)
             } else {
-                prefs[API_KEY] = settings.apiKey
+                putString(ENCRYPTED_API_KEY, settings.apiKey)
             }
+            apply()
+        }
+
+        // Store other settings in DataStore
+        dataStore.edit { prefs ->
             if (settings.defaultModelId.isNullOrBlank()) {
                 prefs.remove(DEFAULT_MODEL_ID)
             } else {
@@ -64,7 +88,7 @@ class SettingsRepositoryImpl(
     }
 
     private companion object {
-        val API_KEY = stringPreferencesKey("api_key")
+        const val ENCRYPTED_API_KEY = "api_key"
         val DEFAULT_MODEL_ID = stringPreferencesKey("default_model_id")
         val DEFAULT_SAMPLER = stringPreferencesKey("default_sampler")
         val KEY_DEFAULT_WIDTH = intPreferencesKey("default_width")
