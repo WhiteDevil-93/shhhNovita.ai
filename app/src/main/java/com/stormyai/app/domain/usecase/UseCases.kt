@@ -177,7 +177,7 @@ class GetModelsUseCase(
 class GetProfilesUseCase(
     private val generationRepository: GenerationRepository
 ) {
-    operator fun invoke(): Result<List<ModelProfile>> {
+    suspend operator fun invoke(): Result<List<ModelProfile>> {
         return generationRepository.getProfiles()
     }
 }

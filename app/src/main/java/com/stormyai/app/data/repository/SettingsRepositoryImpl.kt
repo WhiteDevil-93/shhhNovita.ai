@@ -18,6 +18,15 @@ import com.stormyai.app.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Implementation of settings repository using DataStore.
+ * 
+ * SECURITY NOTE: API keys are currently stored in plain text in DataStore preferences.
+ * This presents a security risk on rooted/jailbroken devices or if app data is backed up.
+ * 
+ * TODO: Consider using EncryptedSharedPreferences or Android Keystore to securely 
+ * store sensitive credentials like API keys.
+ */
 class SettingsRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
     context: Context
@@ -42,8 +51,8 @@ class SettingsRepositoryImpl(
                 apiKey = encryptedPrefs.getString(ENCRYPTED_API_KEY, null),
                 defaultModelId = preferences[DEFAULT_MODEL_ID],
                 defaultSampler = preferences[DEFAULT_SAMPLER] ?: DEFAULT_SAMPLER_VALUE,
-                defaultWidth = preferences[DEFAULT_WIDTH] ?: DEFAULT_WIDTH,
-                defaultHeight = preferences[DEFAULT_HEIGHT] ?: DEFAULT_HEIGHT,
+                defaultWidth = preferences[KEY_DEFAULT_WIDTH] ?: DEFAULT_WIDTH,
+                defaultHeight = preferences[KEY_DEFAULT_HEIGHT] ?: DEFAULT_HEIGHT,
                 defaultSteps = preferences[DEFAULT_STEPS] ?: DEFAULT_STEPS_VALUE,
                 defaultCfgScale = preferences[DEFAULT_CFG_SCALE] ?: DEFAULT_CFG_SCALE_VALUE,
                 saveHistory = preferences[SAVE_HISTORY] ?: true
@@ -70,8 +79,8 @@ class SettingsRepositoryImpl(
                 prefs[DEFAULT_MODEL_ID] = settings.defaultModelId
             }
             prefs[DEFAULT_SAMPLER] = settings.defaultSampler
-            prefs[DEFAULT_WIDTH] = settings.defaultWidth
-            prefs[DEFAULT_HEIGHT] = settings.defaultHeight
+            prefs[KEY_DEFAULT_WIDTH] = settings.defaultWidth
+            prefs[KEY_DEFAULT_HEIGHT] = settings.defaultHeight
             prefs[DEFAULT_STEPS] = settings.defaultSteps
             prefs[DEFAULT_CFG_SCALE] = settings.defaultCfgScale
             prefs[SAVE_HISTORY] = settings.saveHistory
@@ -82,8 +91,8 @@ class SettingsRepositoryImpl(
         const val ENCRYPTED_API_KEY = "api_key"
         val DEFAULT_MODEL_ID = stringPreferencesKey("default_model_id")
         val DEFAULT_SAMPLER = stringPreferencesKey("default_sampler")
-        val DEFAULT_WIDTH = intPreferencesKey("default_width")
-        val DEFAULT_HEIGHT = intPreferencesKey("default_height")
+        val KEY_DEFAULT_WIDTH = intPreferencesKey("default_width")
+        val KEY_DEFAULT_HEIGHT = intPreferencesKey("default_height")
         val DEFAULT_STEPS = intPreferencesKey("default_steps")
         val DEFAULT_CFG_SCALE = floatPreferencesKey("default_cfg_scale")
         val SAVE_HISTORY = booleanPreferencesKey("save_history")
