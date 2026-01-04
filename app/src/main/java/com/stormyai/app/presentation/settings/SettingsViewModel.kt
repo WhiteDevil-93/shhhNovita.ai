@@ -72,6 +72,16 @@ class SettingsViewModel @Inject constructor(
 
     fun saveSettings() {
         val current = state.value
+        
+        // Validate API key
+        if (current.apiKey.isBlank()) {
+            mutableState.value = current.copy(
+                validationMessage = "Warning: API key is empty. Generation will not work without a valid API key."
+            )
+        } else {
+            mutableState.value = current.copy(validationMessage = null)
+        }
+        
         viewModelScope.launch {
             updateSettingsUseCase(
                 UserSettings(
@@ -97,5 +107,6 @@ data class SettingsUiState(
     val defaultHeight: String = "512",
     val defaultSteps: String = "30",
     val defaultCfgScale: String = "7.0",
-    val saveHistory: Boolean = true
+    val saveHistory: Boolean = true,
+    val validationMessage: String? = null
 )

@@ -35,7 +35,13 @@ class GenerationRepositoryImpl(
         }
     }
 
-    override fun getModels(): Result<List<AiModel>> {
+    /**
+     * Returns a hardcoded list of available AI models.
+     * 
+     * Note: This is a temporary implementation returning static model profiles.
+     * TODO: Replace with actual API call to fetch models from the backend.
+     */
+    override suspend fun getModels(): Result<List<AiModel>> {
         return Result.success(
             getDefaultProfiles().map { profile ->
                 AiModel(
@@ -49,7 +55,13 @@ class GenerationRepositoryImpl(
         )
     }
 
-    override fun getProfiles(): Result<List<com.stormyai.app.domain.model.ModelProfile>> {
+    /**
+     * Returns a hardcoded list of model profiles with pre-configured settings.
+     * 
+     * Note: This is a temporary implementation returning static profiles.
+     * TODO: Replace with actual API call to fetch profiles from the backend.
+     */
+    override suspend fun getProfiles(): Result<List<com.stormyai.app.domain.model.ModelProfile>> {
         return Result.success(getDefaultProfiles())
     }
 

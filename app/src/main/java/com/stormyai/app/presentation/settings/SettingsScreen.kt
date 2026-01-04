@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.OutlinedTextField
@@ -15,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -83,25 +85,29 @@ private fun SettingsScreen(
             value = state.defaultWidth,
             onValueChange = onWidthChange,
             label = { Text("Default Width") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         OutlinedTextField(
             value = state.defaultHeight,
             onValueChange = onHeightChange,
             label = { Text("Default Height") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         OutlinedTextField(
             value = state.defaultSteps,
             onValueChange = onStepsChange,
             label = { Text("Default Steps") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         OutlinedTextField(
             value = state.defaultCfgScale,
             onValueChange = onCfgScaleChange,
             label = { Text("Default CFG Scale") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
         Column {
             Text("Save History")
@@ -110,6 +116,15 @@ private fun SettingsScreen(
                 onCheckedChange = onSaveHistoryChange
             )
         }
+        
+        state.validationMessage?.let { message ->
+            Text(
+                text = message,
+                color = androidx.compose.ui.graphics.Color.Red,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+        
         Button(onClick = onSave) {
             Text("Save Settings")
         }

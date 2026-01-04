@@ -1,5 +1,7 @@
 package com.stormyai.app.presentation.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -40,7 +42,7 @@ fun StormyAiNavGraph(modifier: Modifier = Modifier) {
                             }
                         },
                         label = { Text(screen.label) },
-                        icon = {}
+                        icon = { Icon(screen.icon, contentDescription = screen.label) }
                     )
                 }
             }

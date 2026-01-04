@@ -1,5 +1,6 @@
 package com.stormyai.app.data.di
 
+import android.content.Context
 import com.stormyai.app.data.local.dao.HistoryDao
 import com.stormyai.app.data.remote.NovitaApiService
 import com.stormyai.app.data.repository.GenerationRepositoryImpl
@@ -13,6 +14,7 @@ import androidx.datastore.preferences.core.Preferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -27,8 +29,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideSettingsRepository(dataStore: DataStore<Preferences>): SettingsRepository {
-        return SettingsRepositoryImpl(dataStore)
+    fun provideSettingsRepository(
+        dataStore: DataStore<Preferences>,
+        @ApplicationContext context: Context
+    ): SettingsRepository {
+        return SettingsRepositoryImpl(dataStore, context)
     }
 
     @Provides

@@ -70,6 +70,7 @@ goto fail
 :execute
 @rem Setup the command line
 
+@rem CLASSPATH set to empty; not used when -jar flag is specified
 set CLASSPATH=
 
 
